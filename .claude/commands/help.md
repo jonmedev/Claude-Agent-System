@@ -2,14 +2,14 @@
 
 ## Quick Start
 
-**Just use `/systemcc "your task"`** - It automatically selects the best workflow for you!
+**Just use `/topus "your task"`** — The flagship dual-mode orchestrator that handles everything from quick fixes to complex refactors.
 
 ## All Available Commands
 
-### 🎯 Master Router
+### 🎯 Auto-Router Command
 
-#### `/systemcc` - Unified System Entry Point (RECOMMENDED)
-Intelligent router with Lyra AI optimization that selects the best workflow:
+#### `/systemcc` - Intelligent Workflow Router
+Auto-router with Lyra AI optimization that selects the best workflow:
 - **Agent OS** - Project initialization and standards
 - **AI Dev Tasks** - PRD-based feature development
 - **Phase-Based** - Large context management
@@ -74,9 +74,9 @@ All workflows are accessed through `/systemcc` which automatically:
 - Runs all agents sequentially
 - No manual agent commands needed
 
-### 📝 Planning & Execution Command
+### 🚀 Flagship Command
 
-#### `/topus` v3.0 - Dual-Mode Planning & Execution
+#### `/topus` v3.0 - Flagship Dual-Mode Orchestrator
 Intelligent system with two modes: **PLAN** (analysis/exploration, no code changes) and **EXECUTE** (full implementation pipeline).
 
 **Mode Auto-Detection:** The system infers mode from your intent. Manual override with `--plan` or `--exec` flags.
@@ -124,15 +124,21 @@ Analyzes your project and adapts the agent system to your tech stack.
 ```
 Don't know which to use?
     ↓
-Use /systemcc - it intelligently routes for you!
+**Start with /topus** for direct dual-mode orchestration,
+or /systemcc for automatic workflow routing.
 
-Automatic routing:
+/topus handles:
+- Architecture analysis → PLAN mode (auto-detected)
+- Complex refactors, migrations → EXECUTE mode (auto-detected)
+- Quick fixes, simple changes → EXECUTE mode (auto-detected)
+- Override with --plan or --exec flags
+
+/systemcc auto-routes to:
 - Project setup → Agent OS (/agetos)
 - Feature building → AI Dev Tasks (/aidevtasks)
-- Architecture analysis → Topus PLAN mode
-- Large context → Topus EXECUTE mode (phase-based)
 - Complex validation → Complete system
 - Quick fixes → Orchestrated
+- Large context / deep planning → Topus
 
 Manual override:
 /systemcc --workflow=[agetos|aidevtasks|complete|orchestrated]
@@ -167,7 +173,7 @@ ALL commands now use AI prompt enhancement:
 
 ## Tips
 
-1. **Always start with `/systemcc`** for intelligent routing
+1. **Start with `/topus`** for direct dual-mode orchestration, or `/systemcc` for automatic workflow routing
 2. **Building features?** Let it route to AI Dev Tasks
 3. **New project?** It'll suggest Agent OS
 4. **Large context?** Automatic phase-based execution

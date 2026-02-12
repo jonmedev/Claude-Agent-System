@@ -81,7 +81,7 @@ Features:
 ## Installation
 
 ```bash
-/plugin marketplace add Kasempiternal/Claude-Agent-System
+/plugin marketplace add jonmedev/Claude-Agent-System
 /plugin install pcc
 ```
 

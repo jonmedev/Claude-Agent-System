@@ -13,7 +13,7 @@ RED='\033[0;31m'
 NC='\033[0m' # No Color
 
 # Configuration
-REPO_URL="https://github.com/Kasempiternal/Claude-Agent-System"
+REPO_URL="https://github.com/jonmedev/Claude-Agent-System"
 TEMP_DIR="/tmp/claude-agent-system-$$"
 
 echo -e "${BLUE}Claude Agent System Setup${NC}"

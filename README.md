@@ -14,7 +14,7 @@ Choose your installation method:
 ### Option 1: Plugin Install (Recommended)
 
 ```bash
-/plugin marketplace add Kasempiternal/Claude-Agent-System
+/plugin marketplace add jonmedev/Claude-Agent-System
 /plugin install pcc
 ```
 
@@ -25,16 +25,16 @@ Done! You now have `/systemcc`, `/pcc`, `/pcc-opus`, and `/review`.
 **macOS/Linux:**
 ```bash
 # Install for current project
-curl -sSL https://raw.githubusercontent.com/Kasempiternal/Claude-Agent-System/main/setup-claude-agent-system.sh | bash
+curl -sSL https://raw.githubusercontent.com/jonmedev/Claude-Agent-System/main/setup-claude-agent-system.sh | bash
 
 # Install globally (available in ALL projects)
-curl -sSL https://raw.githubusercontent.com/Kasempiternal/Claude-Agent-System/main/setup-claude-agent-system.sh | bash -s -- --global
+curl -sSL https://raw.githubusercontent.com/jonmedev/Claude-Agent-System/main/setup-claude-agent-system.sh | bash -s -- --global
 ```
 
 **Windows (PowerShell):**
 ```powershell
 # Install for current project
-irm https://raw.githubusercontent.com/Kasempiternal/Claude-Agent-System/main/setup-claude-agent-system.ps1 | iex
+irm https://raw.githubusercontent.com/jonmedev/Claude-Agent-System/main/setup-claude-agent-system.ps1 | iex
 
 # Install globally
 .\setup-claude-agent-system.ps1 -Global
@@ -62,7 +62,7 @@ This installs the full system with all 13 systemcc modules, workflows, and middl
 
 # The `/systemcc` Command
 
-The main command. Handles everything automatically with built-in quality gates.
+The intelligent auto-router. Detects your task type and delegates to the appropriate workflow (topus, orchestrated, complete-system, etc.).
 
 ```bash
 /systemcc "what you want to do"
@@ -321,9 +321,9 @@ Executing Complete System workflow...
 
 ---
 
-# The `/topus` Command (v3.0)
+# The `/topus` Command (v3.0) — Flagship Command
 
-The flagship orchestration command. Dual-mode intelligent pipeline for planning and implementation.
+The flagship orchestration command. Dual-mode intelligent pipeline for planning and implementation. **This is the recommended command for most tasks** — it auto-detects whether to analyze or implement.
 
 ```bash
 /topus "task description"
@@ -616,12 +616,12 @@ Fix agents are grouped by file (exclusive ownership, no conflicts) and make mini
 
 | Situation | Use This |
 |-----------|----------|
-| Quick fixes, bug fixes | `/systemcc` |
-| Simple features | `/systemcc` |
-| Most everyday tasks | `/systemcc` |
-| Complex refactors | `/topus` or `/pcc` (EXECUTE mode) |
-| Architecture changes | `/topus` or `/pcc-opus` (EXECUTE mode) |
-| Explore & strategize before coding | `/topus --plan` or `/pcc --plan` |
+| Most tasks (analysis or implementation) | `/topus` (auto-detects mode) |
+| Quick fixes, simple changes | `/topus` or `/systemcc` |
+| Want automatic workflow selection | `/systemcc` (auto-routes) |
+| Complex refactors, migrations | `/topus --exec` |
+| Architecture analysis, exploration | `/topus --plan` |
+| Critical systems (max quality scouts) | `/topus --scout-model opus` |
 | When you want to see/edit the plan first | `/topus` or `/pcc` |
 | Code review before committing | `/review` |
 | Audit code quality without changing anything | `/review` |

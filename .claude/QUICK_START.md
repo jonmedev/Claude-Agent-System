@@ -2,9 +2,25 @@
 
 ## Primary Command
 
-Just use: `/systemcc "describe what you want to do"`
+Just use: `/topus "describe what you want to do"`
 
-The enhanced system automatically:
+Topus v3.0 auto-detects whether to analyze (PLAN mode) or implement (EXECUTE mode).
+Use `--plan` or `--exec` flags to override. Use `--scout-model opus` for critical systems.
+
+Key capabilities:
+1. **Dual-Mode Operation** - PLAN mode for analysis/exploration, EXECUTE mode for full implementation
+2. **CPE (Codebase Pattern Extraction)** - Auto-learns your project conventions before planning
+3. **CIA (Change Impact Analysis)** - Risk scoring (1-10) for every proposed change
+4. **Wave-Based Execution** - Dependency-ordered parallel agents with signal bus
+5. **DSVP Verification** - Domain-specific validation (auth, database, API, frontend)
+6. **Confidence Scoring** - All findings tagged HIGH/MEDIUM/LOW
+
+## Auto-Router (Alternative)
+
+`/systemcc "describe what you want to do"` — Automatically selects the best workflow for your task.
+Routes to topus, orchestrated, complete-system, or specialized workflows based on complexity.
+
+The auto-router provides:
 1. **3-Dimensional Analysis** - Evaluates complexity, risk, and scope for optimal workflow selection
 2. **Build Configuration Detection** - Automatically detects and applies Makefile, CI/CD, and linting rules
 3. **Intelligent Routing** - Selects optimal workflow based on decision algorithms
@@ -15,17 +31,18 @@ The enhanced system automatically:
 ## Examples
 
 ```bash
-# Simple fix (auto-detects low complexity/risk)
-/systemcc "fix typo in login page"
+# PLAN mode (auto-detected from analysis intent)
+/topus "analyze how our auth system works"
+/topus --plan "explore database schema dependencies"
 
-# Complex feature (auto-detects high complexity, triggers comprehensive validation)
-/systemcc "implement user authentication with OAuth"
+# EXECUTE mode (auto-detected from implementation intent)
+/topus "add OAuth2 to the API"
+/topus --exec "refactor database layer for better performance"
 
-# Large refactoring (auto-detects high context load, uses phase-based execution)
-/systemcc "refactor all API endpoints to use new pattern"
-
-# Critical task (auto-detects risk factors, uses enhanced validation)
-/systemcc "urgent: fix production database connection issue"
+# Auto-router examples (delegates to appropriate workflow)
+/systemcc "fix typo in login page"              # Routes to orchestrated
+/systemcc "implement user authentication"       # Routes to complete system
+/systemcc "refactor all API endpoints"          # Routes to topus
 ```
 
 ## Intelligent Features
@@ -52,12 +69,9 @@ The enhanced system automatically:
 
 ## Manual Commands (Power Users)
 
-- `/topus` v3.0 - Dual-mode: PLAN (analysis/exploration) or EXECUTE (implementation pipeline)
-  - Auto-detects mode from intent, or use `--plan` / `--exec` flags
-  - Example: `/topus "analyze auth system"` (PLAN) | `/topus "add OAuth2"` (EXECUTE)
-  - Features: DSVP, CIA, CPE, confidence scoring, wave-based execution
-- `/orchestrated` - Force streamlined workflow with error handling
-- `/planner` - Start complete system with comprehensive validation
+- `/orchestrated` - Force streamlined 3-agent workflow with error handling
+- `/planner` - Start complete 6-agent system with comprehensive validation
+- `/analyzecc` - Deep project analysis with quality standards
 - `/help` - Show enhanced command system
 
 ## Advanced Context Management

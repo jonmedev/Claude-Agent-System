@@ -134,7 +134,9 @@ If `enable_security_scan: true` in pattern results:
 
 **Process:** Create PRD → Generate Tasks → Implement
 
-### Topus v3.0 - Dual-Mode (via /topus)
+### Topus v3.0 - Flagship Orchestrator (via /topus)
+
+**Note**: `/topus` is the recommended command for direct invocation. `/systemcc` routes TO topus when the task requires deep planning or complex implementation.
 
 **Mode Auto-Detection:** The system infers PLAN or EXECUTE mode from intent. Users can override with `--plan` or `--exec` flags.
 
@@ -250,7 +252,7 @@ Score = (Complexity + Risk + Scope) / 3
 | `anti-yolo-web` | Domain-specific | Web/frontend development |
 | `aidevtasks` | Domain-specific | PRD-based feature development |
 | `agetos` | Domain-specific | Project setup and standards |
-| `topus` v3.0 | Domain + Fallback | PLAN mode (analysis) / EXECUTE mode (implementation) |
+| `topus` v3.0 | Flagship Orchestrator | PLAN mode (analysis) / EXECUTE mode (implementation) |
 | `complete_system` | Fallback | Moderate features with validation |
 | `orchestrated` | Fallback | Simple fixes and changes |
 

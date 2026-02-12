@@ -29,7 +29,7 @@ if ($Help) {
 }
 
 # Configuration
-$REPO_URL = "https://github.com/Kasempiternal/Claude-Agent-System"
+$REPO_URL = "https://github.com/jonmedev/Claude-Agent-System"
 $TEMP_DIR = Join-Path $env:TEMP "claude-agent-system-$(Get-Random)"
 
 # Determine installation directory
