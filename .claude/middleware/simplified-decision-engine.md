@@ -20,7 +20,8 @@ Before scoring, detect if task matches a specialized domain:
 | **Web Development** | `anti-yolo-web` | HTML, CSS, JavaScript, React, Vue, Angular, frontend, UI, dashboard, component, web app |
 | **Feature Development** | `aidevtasks` | "build feature", "create system", product requirements, user stories, multi-component features |
 | **Project Setup** | `agetos` | Setup, initialize, standards, conventions, new project, project structure |
-| **Deep Planning** | `plan-opus` | Architecture design, major refactor, migration, "plan first", many unknowns |
+| **Deep Planning / Analysis** | `topus --plan` | Architecture design, "plan first", exploration, audit, assess, investigate, "how should we", "what's the best approach", many unknowns |
+| **Complex Implementation** | `topus --exec` | Major refactor, migration, system-wide implementation, multi-component builds, large-scale changes |
 
 **Decision**:
 - Domain match with HIGH confidence → Use specialized workflow (skip Phase 2)
@@ -85,8 +86,9 @@ These domain matches ALWAYS override the complexity decision table:
 | 1 | Web Development | `anti-yolo-web` |
 | 2 | Feature Development | `aidevtasks` |
 | 3 | Project Setup | `agetos` |
-| 4 | Deep Planning / Architecture | `plan-opus` |
-| 5 | Context >30k tokens | `plan-opus` (phase-based) |
+| 4 | Deep Planning / Analysis | `topus --plan` (v3.0 PLAN mode) |
+| 5 | Complex Implementation / Migration | `topus --exec` (v3.0 EXECUTE mode) |
+| 6 | Context >30k tokens | `topus` (auto-detects mode) |
 
 ## Security Scan Triggers
 
@@ -117,8 +119,30 @@ Task: "setup a new TypeScript project with standards"
 
 Task: "plan the migration from REST to GraphQL"
 → Phase 1: Deep Planning detected (migration, architecture)
-→ Workflow: plan-opus (0.95)
+→ Workflow: topus --plan (0.95) — PLAN mode: analysis only, no code changes
+
+Task: "migrate the entire REST API to GraphQL"
+→ Phase 1: Complex Implementation detected (migrate, system-wide)
+→ Workflow: topus --exec (0.95) — EXECUTE mode: full implementation pipeline
 ```
+
+### Topus v3.0 Dual-Mode Routing
+
+Topus v3.0 introduces **dual-mode operation**. The decision engine detects the appropriate mode:
+
+**PLAN mode** (analysis only, no code changes):
+- Signal words: analyze, investigate, explore, map, audit, assess, evaluate, review, study, understand, explain, document, compare, research
+- Question markers: "how should we", "what's the best approach", "propose a strategy", "how does X work"
+- Override flag: `--plan`
+
+**EXECUTE mode** (full implementation pipeline):
+- Signal words: add, implement, create, build, fix, refactor, migrate, deploy, remove, delete, replace, upgrade, update, change, modify
+- Outcome markers: imperative verbs, specific deliverables mentioned
+- Override flag: `--exec`
+
+**Auto-detection**: When neither flag is provided, Topus v3.0 analyzes the user's intent via signal words to select the appropriate mode automatically.
+
+**v3.0 Features available in both modes**: DSVP (Domain-Specific Verification Profiles), Signal Bus (inter-agent communication), CIA (Change Impact Analysis), CPE (Codebase Pattern Extraction), confidence scoring (HIGH/MEDIUM/LOW), wave-based execution, 3-resolution planning, and adaptive timeouts.
 
 ### Phase 2 Fallback (No Domain Match)
 ```
@@ -154,7 +178,7 @@ Always prefer:
 | `anti-yolo-web` | Phase 1 | Web/frontend development |
 | `aidevtasks` | Phase 1 | PRD-based feature development |
 | `agetos` | Phase 1 | Project setup and standards |
-| `plan-opus` | Phase 1 + Phase 2 | Planning, architecture, complex tasks |
+| `topus` (v3.0) | Phase 1 + Phase 2 | Planning (PLAN mode), architecture, complex implementations (EXECUTE mode) |
 | `complete_system` | Phase 2 | Moderate features with validation |
 | `orchestrated` | Phase 2 | Simple fixes and changes |
 

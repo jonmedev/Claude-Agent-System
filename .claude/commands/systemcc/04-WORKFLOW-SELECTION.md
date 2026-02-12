@@ -134,16 +134,32 @@ If `enable_security_scan: true` in pattern results:
 
 **Process:** Create PRD → Generate Tasks → Implement
 
-### Phase-Based (via /plan-opus)
-**Triggers:**
+### Topus v3.0 - Dual-Mode (via /topus)
+
+**Mode Auto-Detection:** The system infers PLAN or EXECUTE mode from intent. Users can override with `--plan` or `--exec` flags.
+
+**PLAN Mode Indicators (analysis/exploration, no code changes):**
+- Keywords: "analyze", "explore", "understand", "investigate", "review", "audit", "map", "assess"
+- Intent: Architecture understanding, dependency mapping, risk assessment, codebase exploration
+- Output: Confidence-scored findings (HIGH/MEDIUM/LOW), no code modifications
+
+**EXECUTE Mode Triggers (full implementation pipeline):**
 - Context already > 30,000 tokens
 - More than 10 files loaded
 - Project has 100+ files
 - Task touches 5+ modules
 - Estimated time > 60 minutes
-- Keywords: "entire", "all", "across", "throughout", "migrate"
+- Keywords: "entire", "all", "across", "throughout", "migrate", "implement", "add", "build", "refactor"
 
-**Process:** Plan → Explore → Execute Phases → Verify
+**Key Features:**
+- DSVP: Domain-Specific Verification (auth, database, API, frontend)
+- CIA: Change Impact Analysis with risk scoring
+- CPE: Codebase Pattern Extraction (learns project conventions)
+- Wave-based execution: Dependency-ordered parallel agents
+- Adaptive Tiers: SIMPLE (~8 agents), MEDIUM (~15-22), COMPLEX (~22-35)
+
+**Process (PLAN):** Explore → Analyze → Score Confidence → Report
+**Process (EXECUTE):** Plan → Explore → Wave-Based Execution → DSVP Verify
 
 ### Complete System (Standard)
 **Keywords:**
@@ -213,7 +229,8 @@ If task matches specialized domain with HIGH confidence:
   Web Development    → anti-yolo-web
   Feature Dev        → aidevtasks
   Project Setup      → agetos
-  Deep Planning      → plan-opus
+  Analysis/Exploration → topus (PLAN mode)
+  Deep Planning        → topus (EXECUTE mode)
 
 If no domain match → proceed to Phase 2
 
@@ -223,7 +240,7 @@ Score = (Complexity + Risk + Scope) / 3
 
   1.0 - 2.0  → orchestrated (simple)
   2.1 - 3.5  → complete_system (moderate)
-  3.6 - 5.0  → plan-opus (complex)
+  3.6 - 5.0  → topus (complex)
 ```
 
 ### All Available Workflows
@@ -233,7 +250,7 @@ Score = (Complexity + Risk + Scope) / 3
 | `anti-yolo-web` | Domain-specific | Web/frontend development |
 | `aidevtasks` | Domain-specific | PRD-based feature development |
 | `agetos` | Domain-specific | Project setup and standards |
-| `plan-opus` | Domain + Fallback | Planning, architecture, complex tasks |
+| `topus` v3.0 | Domain + Fallback | PLAN mode (analysis) / EXECUTE mode (implementation) |
 | `complete_system` | Fallback | Moderate features with validation |
 | `orchestrated` | Fallback | Simple fixes and changes |
 

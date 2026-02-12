@@ -390,11 +390,19 @@
       "agents": 6,
       "duration_estimate": "30-60 minutes"
     },
-    "plan-opus": {
-      "description": "Phase-based context-optimized workflow with parallel exploration",
-      "use_for": ["large codebases", "migrations", "system-wide changes"],
-      "trigger": "context_size > 30000 tokens",
-      "duration_estimate": "60+ minutes"
+    "topus": {
+      "description": "Topus v3.0 — Intelligent parallel orchestration with dual-mode (PLAN/EXECUTE), domain-expert agents, graph exploration, knowledge bus, confidence scoring, wave-based execution, and adaptive scaling",
+      "modes": ["plan", "execute"],
+      "use_for": ["large codebases", "migrations", "system-wide changes", "architecture analysis", "deep planning", "complex implementations"],
+      "plan_mode_triggers": ["analyze", "investigate", "explore", "audit", "assess", "how should we", "what's the best approach", "architecture review"],
+      "execute_mode_triggers": ["implement", "create", "build", "fix", "refactor", "migrate", "deploy", "remove", "replace", "upgrade", "update", "modify"],
+      "trigger": "context_size > 30000 tokens OR deep_planning_detected OR architecture_analysis",
+      "duration_estimate": "15-120 minutes (tier-dependent)",
+      "features": ["dual-mode", "DSVP", "signal-bus", "CIA", "CPE", "confidence-scoring", "wave-execution", "3-level-planning"],
+      "flags": {
+        "--plan": "Force PLAN mode (analysis only, no code changes)",
+        "--exec": "Force EXECUTE mode (full implementation pipeline)"
+      }
     },
     "aidevtasks": {
       "description": "PRD-based feature development",

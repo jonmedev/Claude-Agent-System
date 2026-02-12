@@ -2,7 +2,7 @@
 HOOK_METADATA:
   id: auto-pattern-detection
   name: Auto Pattern Detection
-  version: 2.0.0
+  version: 3.0.0
   type: UserPromptSubmit
   priority: 10
   enabled: true
@@ -436,7 +436,7 @@ The old `pattern-detector.md` remains for reference but is no longer executed di
 
 ---
 
-**Version**: 2.0.0 (Full Hook - Phase 2.2)
+**Version**: 3.0.0 (Full Hook - Phase 2.2)
 **Upgraded From**: pattern-detector.md v1.0.0 (Phase 1.3)
 **Last Updated**: 2025-01-26
 **Dependencies**: `workflow-suggestions.json`

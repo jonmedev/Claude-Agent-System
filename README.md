@@ -9,7 +9,7 @@ Choose your installation method:
 | Method | Best For | Commands You Get |
 |--------|----------|------------------|
 | **Plugin** | Quick install, easy updates | `/systemcc`, `/pcc`, `/pcc-opus`, `/review` |
-| **Script** | Full system with all modules | `/systemcc`, `/plan-opus`, + workflows |
+| **Script** | Full system with all modules | `/systemcc`, `/topus`, + workflows |
 
 ### Option 1: Plugin Install (Recommended)
 
@@ -217,10 +217,12 @@ Best for: Bug fixes, simple features, refactoring
 
 Best for: New features, complex changes, critical systems
 
-### Phase-Based (Large Codebase Handler)
+### Phase-Based (Large Codebase Handler) -- powered by topus v3.0
 - Breaks massive tasks into focused phases
 - Maintains context quality across large projects
 - Checkpoint system prevents context loss
+- Wave-based parallel execution with signal bus (v3.0)
+- CPE auto-learns project conventions before planning (v3.0)
 
 Best for: Enterprise codebases, major refactors, system migrations
 
@@ -319,34 +321,78 @@ Executing Complete System workflow...
 
 ---
 
-# The `/plan-opus` Command
+# The `/topus` Command (v3.0)
 
-For when you want explicit control over the planning process.
+The flagship orchestration command. Dual-mode intelligent pipeline for planning and implementation.
 
 ```bash
-/plan-opus "task description"
+/topus "task description"
+```
+
+## Dual-Mode Operation (v3.0)
+
+Topus v3.0 operates in two distinct modes, **auto-detected** from your intent:
+
+| Mode | Purpose | Output | Override Flag |
+|------|---------|--------|---------------|
+| **PLAN** | Analysis & exploration only | Strategy document (`.claude/plans/{task}.md`) | `--plan` |
+| **EXECUTE** | Full implementation pipeline | Working code + verification | `--exec` |
+
+```bash
+# Auto-detected as PLAN mode (exploratory language)
+/topus "analyze the authentication system and suggest improvements"
+
+# Auto-detected as EXECUTE mode (action language)
+/topus "add JWT authentication with refresh tokens"
+
+# Force a specific mode
+/topus --plan "add JWT authentication"    # Only produces a strategy doc
+/topus --exec "refactor auth module"      # Skips plan review, goes straight to implementation
 ```
 
 ## Why This Command Exists
 
 Claude Code has a native "plan mode" (`/plan`), but the community discovered a limitation: **it uses Haiku as the code scout**. While Haiku is efficient and fast, it's also the least capable model in the Claude family. For complex codebases, you may want smarter models doing the exploration.
 
-`/plan-opus` was created to give you **more control over the planning process** with configurable models:
+`/topus` was created to give you **more control over the planning and execution process** with configurable models and advanced systems:
 
-| Aspect | Native Plan Mode | `/plan-opus` |
-|--------|------------------|--------------|
-| Scout Model | Haiku (2-3 agents) | Sonnet by default (2-6 agents, configurable to Opus) |
+| Aspect | Native Plan Mode | `/topus` v3.0 |
+|--------|------------------|---------------|
+| Scout Model | Haiku (2-3 agents) | Sonnet by default (configurable to Opus) |
+| Mode | Plan only | Dual-mode: PLAN or EXECUTE (auto-detected) |
 | Plan Visibility | Shown to user | Written to editable `.md` file |
 | User Approval | Yes, before execution | Yes, with ability to edit the plan first |
-| Parallelization | Limited (Claude Code rarely parallelizes) | Aggressive (multiple agents per phase) |
-| Implementation | Sequential | 2-6 parallel Opus agents |
-| Post-Cleanup | None | 2-6 code simplifier agents |
+| Parallelization | Limited | Wave-based DAG execution with signal bus |
+| Implementation | Sequential | Dependency-ordered parallel agents |
+| Post-Cleanup | None | Code simplifier agents |
+| Verification | None | DSVP domain-specific profiles |
+
+## Key v3.0 Systems
+
+- **CPE (Codebase Pattern Extraction)** -- Auto-learns project conventions (naming, architecture, patterns) in ~30 seconds
+- **CIA (Change Impact Analysis)** -- Risk scoring (1-10) for every proposed change before implementation
+- **DSVP (Domain-Specific Verification Profiles)** -- Tailored verification for auth, database, API, frontend, infra, data, and testing domains
+- **Confidence Scoring** -- All exploration findings tagged HIGH / MEDIUM / LOW
+- **Wave-Based Execution** -- Dependency-ordered parallel agent deployment via DAG
+- **Signal Bus** -- Inter-agent communication during implementation (agents share discoveries in real time)
+- **3-Resolution Planning** -- Level 1 Strategic (user), Level 2 Tactical (orchestrator), Level 3 Operational (agents)
+- **Test Strategy Generation** -- Automated test planning with coverage targets
+- **Adaptive Timeouts** -- SIMPLE 3 min/agent, MEDIUM 8 min, COMPLEX 15 min
+- **Conditional Phase Skipping** -- Smart skip logic saves ~8 agents on simple tasks
+
+## Complexity Tiers
+
+| Tier | Agents | Best For |
+|------|--------|----------|
+| SIMPLE | ~8 agents | Bug fixes, config changes, small features |
+| MEDIUM | ~15-22 agents | Multi-file features, moderate refactors |
+| COMPLEX | ~22-35 agents | Architecture changes, system migrations, large features |
 
 ## Configurable Scout Model
 
 By default, scouts use **Sonnet** to balance intelligence and token cost. But if you want maximum exploration quality, you can switch scouts to **Opus**.
 
-Edit `.claude/commands/plan-opus.md`, line 30:
+Edit `.claude/commands/topus.md`, line 30:
 
 ```markdown
 # Default (token-efficient):
@@ -356,70 +402,80 @@ Edit `.claude/commands/plan-opus.md`, line 30:
 ...using the Task tool with `subagent_type='Explore'` and `model='opus'`
 ```
 
-**Why Sonnet is the default**: Running 2-6 Opus scouts + 2-6 Opus implementers + 2-6 Opus simplifiers can consume significant tokens. Sonnet scouts are smart enough for exploration while keeping costs reasonable. Switch to Opus scouts only for particularly complex codebases.
+**Why Sonnet is the default**: Running Opus scouts + Opus implementers + Opus simplifiers can consume significant tokens. Sonnet scouts are smart enough for exploration while keeping costs reasonable. Switch to Opus scouts only for particularly complex codebases.
 
 ## How It Works
 
-`/plan-opus` follows an orchestrator pattern - Opus coordinates everything but delegates actual work to specialized agents:
+`/topus` follows an orchestrator pattern -- Opus coordinates everything but delegates actual work to specialized agents. In EXECUTE mode, the full pipeline runs:
 
 ```
-/plan-opus "your complex task"
+/topus "your complex task"
          │
          ▼
 ┌─────────────────────────────────────┐
-│  Phase 1: TASK UNDERSTANDING        │
-│  Clarify requirements if needed     │
+│  AUTO-DETECTION                     │
+│  Infer PLAN or EXECUTE mode         │
+│  (override with --plan / --exec)    │
 └────────────┬────────────────────────┘
              │
              ▼
 ┌─────────────────────────────────────┐
-│  Phase 2: PARALLEL EXPLORATION      │
-│  2-6 Sonnet scouts explore codebase │
-│  (Architecture, Features, Tests...) │
+│  CPE: CODEBASE PATTERN EXTRACTION   │
+│  Learn project conventions (~30s)   │
 └────────────┬────────────────────────┘
              │
              ▼
 ┌─────────────────────────────────────┐
-│  Phase 3: SYNTHESIS                 │
-│  Combine findings, verify key files │
+│  PARALLEL EXPLORATION               │
+│  Scouts explore codebase            │
+│  Findings tagged HIGH/MEDIUM/LOW    │
 └────────────┬────────────────────────┘
              │
              ▼
 ┌─────────────────────────────────────┐
-│  Phase 4: PLAN CREATION             │
-│  Write detailed plan to file        │
+│  CIA: CHANGE IMPACT ANALYSIS        │
+│  Risk scoring (1-10) per change     │
+└────────────┬────────────────────────┘
+             │
+             ▼
+┌─────────────────────────────────────┐
+│  3-RESOLUTION PLAN CREATION         │
+│  Strategic → Tactical → Operational │
 │  .claude/plans/{task-slug}.md       │
 └────────────┬────────────────────────┘
              │
+         [PLAN mode stops here]
+             │
              ▼
 ┌─────────────────────────────────────┐
-│  Phase 5: YOUR REVIEW               │
-│  ⏸️  STOPS HERE - You edit the plan │
-│  Confirm when ready to proceed      │
+│  YOUR REVIEW                        │
+│  Edit the plan, confirm to proceed  │
 └────────────┬────────────────────────┘
              │
              ▼
 ┌─────────────────────────────────────┐
-│  Phase 6: PARALLEL IMPLEMENTATION   │
-│  2-6 Opus agents work in parallel   │
+│  WAVE-BASED IMPLEMENTATION          │
+│  DAG-ordered parallel agents        │
+│  Signal bus for inter-agent comms   │
 └────────────┬────────────────────────┘
              │
              ▼
 ┌─────────────────────────────────────┐
-│  Phase 7: VERIFICATION              │
-│  Tests + Code review                │
+│  DSVP VERIFICATION                  │
+│  Domain-specific validation         │
+│  + Test strategy execution          │
 └────────────┬────────────────────────┘
              │
              ▼
 ┌─────────────────────────────────────┐
-│  Phase 8: SIMPLIFICATION            │
-│  2-6 agents clean up the code       │
+│  SIMPLIFICATION                     │
+│  Agents clean up the code           │
 └─────────────────────────────────────┘
 ```
 
 ## The Plan File
 
-Unlike automatic workflows, `/plan-opus` creates an actual file you can review and edit:
+Unlike automatic workflows, `/topus` creates an actual file you can review and edit:
 
 ```markdown
 # Implementation Plan: Add User Authentication
@@ -429,6 +485,10 @@ Status: PENDING APPROVAL
 
 ## Summary
 Add JWT-based authentication with login, logout, and session management.
+
+## Change Impact Analysis
+Overall Risk: 7/10
+Affected domains: auth, database, API
 
 ## Parallelization Strategy
 
@@ -455,21 +515,24 @@ You can:
 ## Example Usage
 
 ```bash
-# Complex feature - want to review the plan
-/plan-opus "add real-time notifications with WebSocket"
+# PLAN mode -- explore and strategize
+/topus "analyze the payment system for potential security issues"
 
-# System creates plan at .claude/plans/add-real-time-notifications.md
-# You review, maybe edit the WebSocket library choice
-# You confirm
-# 4 Opus agents implement in parallel
-# Done!
+# EXECUTE mode -- full implementation
+/topus "add real-time notifications with WebSocket"
+
+# Force mode override
+/topus --plan "add WebSocket notifications"   # Strategy doc only
+/topus --exec "fix the CORS configuration"    # Straight to implementation
 ```
+
+> For full v3.0 details (all phases, signal bus protocol, DSVP profiles, CIA methodology), see [`.claude/commands/topus.md`](.claude/commands/topus.md).
 
 ---
 
 # The `/pcc` and `/pcc-opus` Commands (Plugin)
 
-Parallel Claude Coordinator - an orchestrator that spawns agent swarms for exploration and implementation.
+Parallel Claude Coordinator -- the **plugin version** of topus v3.0. Same dual-mode engine, installed via the plugin system instead of the script installer.
 
 ```bash
 /pcc "implement user authentication with JWT tokens"
@@ -485,18 +548,21 @@ Parallel Claude Coordinator - an orchestrator that spawns agent swarms for explo
 
 ## How PCC Works
 
-1. **Task Understanding** - Clarifies the task with you
-2. **Parallel Exploration** - Spawns 2-6 scout agents to map the codebase
-3. **Synthesis** - Combines findings into unified understanding
-4. **Clarification** - Asks questions if multiple valid approaches exist
-5. **Plan Creation** - Creates editable plan at `.claude/plans/{task}.md`
-6. **User Review** - You edit and approve the plan before any code is written
-7. **Parallel Implementation** - Spawns 2-6 Opus agents working simultaneously
-8. **Verification** - Tests and code review
-9. **Simplification** - 2-6 parallel agents clean up the code
-10. **Final Report** - Summarizes everything
+Powered by topus v3.0, `/pcc` includes the same core systems: dual-mode (PLAN/EXECUTE), CPE, CIA, confidence scoring, DSVP, wave-based execution, and signal bus.
 
-**Key difference from `/plan-opus`**: PCC is a plugin skill with dynamic agent counts (2-6 based on complexity), while `/plan-opus` is a script-install command with similar capabilities.
+1. **Task Understanding** - Clarifies the task with you
+2. **CPE** - Auto-learns project conventions (~30s)
+3. **Parallel Exploration** - Spawns scout agents to map the codebase (findings tagged HIGH/MEDIUM/LOW)
+4. **CIA** - Change Impact Analysis with risk scoring (1-10)
+5. **Synthesis** - Combines findings into unified understanding
+6. **Plan Creation** - Creates editable plan at `.claude/plans/{task}.md`
+7. **User Review** - You edit and approve the plan before any code is written
+8. **Wave-Based Implementation** - DAG-ordered parallel agents with signal bus
+9. **DSVP Verification** - Domain-specific verification + test strategy execution
+10. **Simplification** - Parallel agents clean up the code
+11. **Final Report** - Summarizes everything
+
+**Key difference from `/topus`**: PCC is a plugin skill (installed via `/plugin install pcc`), while `/topus` is a script-install command. Both run the same v3.0 engine.
 
 ---
 
@@ -553,12 +619,14 @@ Fix agents are grouped by file (exclusive ownership, no conflicts) and make mini
 | Quick fixes, bug fixes | `/systemcc` |
 | Simple features | `/systemcc` |
 | Most everyday tasks | `/systemcc` |
-| Complex refactors | `/plan-opus` or `/pcc` |
-| Architecture changes | `/plan-opus` or `/pcc-opus` |
-| When you want to see/edit the plan first | `/plan-opus` or `/pcc` |
+| Complex refactors | `/topus` or `/pcc` (EXECUTE mode) |
+| Architecture changes | `/topus` or `/pcc-opus` (EXECUTE mode) |
+| Explore & strategize before coding | `/topus --plan` or `/pcc --plan` |
+| When you want to see/edit the plan first | `/topus` or `/pcc` |
 | Code review before committing | `/review` |
 | Audit code quality without changing anything | `/review` |
 | Pre-PR review with health scoring | `/review` |
+| Clean up context and temp files after long sessions | `/cleanup-context` |
 
 ---
 
@@ -610,6 +678,7 @@ Data is stored separately in your home directory (never in your project):
 ```bash
 /help                              # Show all available commands
 /analyzecc                         # Manual project analysis
+/cleanup-context                   # Clean up temp files, phase artifacts, and stale context
 ```
 
 ---

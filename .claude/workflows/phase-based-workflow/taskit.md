@@ -1,6 +1,6 @@
 # Phase-Based Task Execution System
 
-> **Note**: This phase-based approach is now accessed via `/plan-opus` or automatically through `/systemcc` routing for large-scope tasks.
+> **Note**: This phase-based approach is powered by **topus v3.0** and accessed via `/topus` (script install) or `/pcc` (plugin install), or automatically through `/systemcc` routing for large-scope tasks.
 
 ## ⚠️ File Policy
 Temporary phase files go to `.claude/temp/` and are deleted after workflow completion.
@@ -8,7 +8,24 @@ Do NOT create files in the target repo unless user explicitly requests.
 
 ## Overview
 
-Phase-based development breaks complex tasks into focused phases, optimizing context usage and improving quality by allowing deep focus on each phase independently. Access this workflow via `/plan-opus` for explicit phase planning.
+Phase-based development breaks complex tasks into focused phases, optimizing context usage and improving quality by allowing deep focus on each phase independently. Access this workflow via `/topus` for explicit phase planning.
+
+### Dual-Mode Operation (v3.0)
+
+Topus v3.0 supports two modes, **auto-detected** from intent:
+
+- **PLAN mode** -- Exploration and analysis only. Produces a strategy document at `.claude/plans/{task}.md` and stops. Force with `--plan`.
+- **EXECUTE mode** -- Full implementation pipeline including wave-based parallel execution and DSVP verification. Force with `--exec`.
+
+### v3.0 Systems Active During Phase Execution
+
+- **CPE (Codebase Pattern Extraction)** -- Learns project conventions (naming, architecture, patterns) in ~30 seconds before any planning begins
+- **Confidence Scoring** -- All exploration findings are tagged HIGH / MEDIUM / LOW to prioritize what matters
+- **CIA (Change Impact Analysis)** -- Every proposed change receives a risk score (1-10) before implementation
+- **Signal Bus** -- Agents communicate discoveries in real time during wave-based implementation
+- **DSVP (Domain-Specific Verification Profiles)** -- Tailored verification for auth, database, API, frontend, infra, data, and testing domains
+- **Adaptive Timeouts** -- SIMPLE 3 min/agent, MEDIUM 8 min, COMPLEX 15 min
+- **Conditional Phase Skipping** -- Smart skip logic saves ~8 agents on SIMPLE tasks
 
 ### Critical for Large Codebases
 When working in projects with hundreds of files or when context accumulates during long sessions, Claude's context window can become compressed, leading to:
@@ -36,21 +53,31 @@ Instead of attempting to complete an entire complex task in one go (which can ov
 
 ## How It Works
 
-### 1. Task Analysis & Planning
-When invoked with `/plan-opus "your complex task"`, the system:
-- Analyzes the task requirements
-- Breaks it into 3-7 logical phases
+### 1. Task Analysis & Planning (v3.0 Enhanced)
+When invoked with `/topus "your complex task"`, the system:
+- **CPE** runs first to learn project conventions (~30 seconds)
+- Scouts explore the codebase in parallel, with findings tagged HIGH/MEDIUM/LOW
+- **CIA** produces risk scores (1-10) for all proposed changes
+- Breaks the task into phases via **3-resolution planning** (Strategic, Tactical, Operational)
 - Creates a `.claude/plans/{task-slug}.md` file with detailed phase descriptions
-- Estimates complexity and time for each phase
+- Estimates complexity and assigns a tier (SIMPLE ~8 agents, MEDIUM ~15-22, COMPLEX ~22-35)
+- In **PLAN mode**, execution stops here with the strategy document
 
-### 2. Phase Execution
-For each phase:
-- Loads only relevant context for that phase
-- Executes with full focus on phase objectives
+### 2. Phase Execution (Wave-Based in v3.0)
+In **EXECUTE mode**, for each wave of phases:
+- DAG determines execution order (phases with no unmet dependencies run in parallel)
+- **Signal bus** enables inter-agent communication during implementation
+- Each agent receives only relevant context for its scope
+- **Adaptive timeouts** apply based on tier (3/8/15 min per agent)
 - Documents outcomes in .claude/temp/
-- Prepares handoff for next phase
+- **Conditional phase skipping** bypasses unnecessary phases for SIMPLE tasks
 
-### 3. Context Optimization
+### 3. Verification (DSVP in v3.0)
+- **DSVP** selects domain-specific verification profiles (auth, database, API, frontend, infra, data, testing)
+- Automated **test strategy generation** with coverage targets
+- Each verification profile applies domain-relevant checks
+
+### 4. Context Optimization
 - Each phase starts fresh with minimal context
 - Previous phase outcomes are summarized
 - Only essential information carries forward
@@ -75,7 +102,7 @@ Total: 43k tokens with consistent quality
 ## Usage
 
 ```bash
-/plan-opus "build a complete user dashboard with analytics, notifications, and settings"
+/topus "build a complete user dashboard with analytics, notifications, and settings"
 ```
 
 This creates a phase plan and begins execution:
@@ -159,7 +186,7 @@ Critical information for Phase [X+1]:
 ## Execution Flow
 
 ```python
-def execute_plan_opus(task_description):
+def execute_topus(task_description):
     # 1. Analyze and Plan
     phases = analyze_task_complexity(task_description)
     create_task_plan(phases)  # Creates in .claude/temp/
@@ -190,11 +217,15 @@ def execute_plan_opus(task_description):
 3. **Better Error Recovery**: Issues isolated to phases
 4. **Clear Progress**: Visible phase completion
 5. **Knowledge Capture**: Structured documentation
+6. **Convention Awareness (v3.0)**: CPE auto-learns project patterns before planning
+7. **Risk Visibility (v3.0)**: CIA scores every change 1-10 before implementation
+8. **Domain-Specific Verification (v3.0)**: DSVP applies targeted checks per domain
+9. **Real-Time Agent Coordination (v3.0)**: Signal bus enables inter-agent communication during waves
 
 ## Integration with Existing Workflows
 
 ### Automatic Selection via /systemcc
-`/systemcc` will automatically use phase-based execution (via plan-opus patterns) when:
+`/systemcc` will automatically use phase-based execution (via topus v3.0 patterns) when:
 - Current context exceeds 30,000 tokens
 - More than 10 files are loaded in context
 - Working in a project with 100+ files and broad changes
@@ -202,7 +233,9 @@ def execute_plan_opus(task_description):
 - Multiple system integrations are involved
 
 ### Manual Usage
-`/plan-opus` can be used directly for:
+`/topus` (script) or `/pcc` (plugin) can be used directly for:
+- **PLAN mode** -- Exploration and strategy only (`--plan` flag)
+- **EXECUTE mode** -- Full implementation pipeline (`--exec` flag, or auto-detected)
 - **Planning** complex features before implementation
 - **Large tasks** that would overwhelm single-context execution
 - **Refactoring** that touches many files
@@ -211,7 +244,7 @@ def execute_plan_opus(task_description):
 ## Example: Complex Feature Implementation
 
 ```bash
-User: /plan-opus "implement complete authentication system with OAuth, 2FA, and session management"
+User: /topus "implement complete authentication system with OAuth, 2FA, and session management"
 ```
 
 Generated Plan:
@@ -249,8 +282,10 @@ Phase 6: Validation & Security
 
 ## Advanced Features
 
-### Parallel Phase Execution
-Some phases can be marked for parallel execution:
+### Wave-Based Parallel Execution (v3.0)
+In v3.0, parallel execution is automatic via DAG analysis. The system builds a dependency graph and deploys agents in waves -- all phases in a wave run simultaneously, and the next wave starts when the current one completes. The signal bus allows agents within a wave to share discoveries in real time.
+
+Phases can still be annotated manually for clarity:
 ```markdown
 ## Phase 3: Component A [PARALLEL-OK with Phase 4]
 ## Phase 4: Component B [PARALLEL-OK with Phase 3]
@@ -267,7 +302,7 @@ Explicit dependency declaration:
 ### Checkpoint Recovery
 If execution fails, resume from last completed phase by referencing the plan:
 ```bash
-/plan-opus --resume "continue from phase 3"
+/topus --resume "continue from phase 3"
 ```
 
 ## Best Practices
@@ -287,8 +322,10 @@ If execution fails, resume from last completed phase by referencing the plan:
 
 ## Success Metrics
 
-Typical improvements with phase-based execution:
+Typical improvements with phase-based execution (enhanced by v3.0):
 - 60-80% reduction in context usage
 - 2-3x improvement in code quality
 - 90% reduction in context-related errors
 - 50% faster completion for complex tasks
+- ~8 agents saved on SIMPLE tasks via conditional phase skipping (v3.0)
+- Domain-specific verification coverage via DSVP profiles (v3.0)

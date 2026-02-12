@@ -197,6 +197,85 @@ Claude: 🎯 SYSTEMCC DETECTED - Command acknowledged and workflow initiated
 ✨ Dashboard feature complete!
 ```
 
+## Example 7a: Topus v3.0 PLAN Mode (Analysis/Exploration)
+
+```
+User: /systemcc "analyze how our authentication system works"
+
+Claude: 🎯 SYSTEMCC DETECTED - Command acknowledged and workflow initiated
+✅ Following SYSTEMCC workflow instructions from CLAUDE.md
+
+[Lyra optimization...]
+
+🧠 Workflow Detection:
+- Analysis/exploration intent detected
+→ Routing to Topus v3.0 (PLAN mode - no code changes)
+
+🔍 Mode: PLAN (auto-detected from "analyze" intent)
+   Override: use --exec flag to force EXECUTE mode
+
+🔄 Parallel Exploration: Spawning analysis agents...
+├─ Agent 1: Auth architecture mapping
+├─ Agent 2: Dependency analysis
+├─ Agent 3: Security pattern review
+└─ Agent 4: Integration points
+
+📊 Findings (Confidence Scored):
+- [HIGH] JWT-based auth with refresh tokens in auth/middleware.js
+- [HIGH] Role-based access control in models/user.js
+- [MEDIUM] Session fallback for legacy endpoints
+- [LOW] Potential circular dependency in auth/providers/
+
+📋 CIA (Change Impact Analysis):
+- 12 files depend on auth middleware
+- Risk: HIGH if middleware signature changes
+
+✨ Analysis complete! Report saved to ~/.claude/plans/
+No code was modified (PLAN mode).
+```
+
+## Example 7b: Topus v3.0 EXECUTE Mode (Implementation)
+
+```
+User: /systemcc "add OAuth2 to the API"
+
+Claude: 🎯 SYSTEMCC DETECTED - Command acknowledged and workflow initiated
+✅ Following SYSTEMCC workflow instructions from CLAUDE.md
+
+[Lyra optimization...]
+
+🧠 Workflow Detection:
+- Implementation intent detected
+→ Routing to Topus v3.0 (EXECUTE mode)
+
+🔧 Mode: EXECUTE (auto-detected from "add" intent)
+   Override: use --plan flag for analysis-only
+
+📊 CPE (Codebase Pattern Extraction):
+- Auth pattern: middleware-based, JWT tokens
+- API pattern: Express routes, controller separation
+- Test pattern: Jest + supertest integration tests
+
+🔄 Wave-Based Execution:
+├─ Wave 1: OAuth2 provider config + database migration
+├─ Wave 2: Auth middleware + route handlers (depends on Wave 1)
+└─ Wave 3: Tests + documentation (depends on Wave 2)
+
+🔄 Wave 1/3: Foundation...
+✅ Wave 1/3: Complete
+
+🔄 Wave 2/3: Core implementation...
+✅ Wave 2/3: Complete
+
+🔄 Wave 3/3: Verification...
+├─ DSVP (Auth Domain): Token validation ✅, Scope checks ✅
+├─ CIA: 3 files modified, 4 new files, risk: MEDIUM
+└─ Tests: 12 passing
+✅ Wave 3/3: Complete
+
+✨ OAuth2 implementation complete!
+```
+
 ## Example 8: User Clarification
 
 ```

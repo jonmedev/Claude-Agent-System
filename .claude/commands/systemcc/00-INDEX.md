@@ -60,8 +60,9 @@ Modules load **progressively** based on task complexity to optimize context usag
 2. **Lyra** - Optimize prompt
 3. **Build Config** - Apply project rules
 4. **Analysis** - Two-phase workflow selection:
-   - Phase 1: Domain detection (web, feature, setup, planning)
+   - Phase 1: Domain detection (web, feature, setup, planning/analysis)
    - Phase 2: Complexity scoring (if no domain match)
+   - Topus v3.0: Auto-detects PLAN vs EXECUTE mode from intent
 5. **Selection** - Choose from all 6 workflows
 6. **Execution** - Run with progress
 7. **Review** - Triple code review
@@ -81,7 +82,7 @@ Modules load **progressively** based on task complexity to optimize context usag
 |----------|----------|
 | `orchestrated` | Simple tasks (3-agent) |
 | `complete_system` | Complex tasks (6-agent) |
-| `plan-opus` | Large scope (phase-based) |
+| `topus` v3.0 | Dual-mode: PLAN (analysis) / EXECUTE (implementation) with DSVP, CIA, CPE |
 | `aidevtasks` | Feature development (PRD) |
 | `anti-yolo-web` | Web app development |
 | `agetos` | Project initialization |

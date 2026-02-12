@@ -134,8 +134,16 @@ if ($Global) {
 }
 
 Write-Host ""
+Write-Host "Available Commands:" -ForegroundColor Blue
+Write-Host '   /systemcc  - Intelligent router (auto-selects workflow)'
+Write-Host '   /topus     - v3.0 Dual-mode: PLAN (analysis) or EXECUTE (implementation)'
+Write-Host '               Auto-detects mode, or use --plan / --exec flags'
+Write-Host '   /analyzecc - Auto-adapt to your tech stack'
+Write-Host ""
 Write-Host "Usage:" -ForegroundColor Blue
 Write-Host '   /systemcc "describe what you want to do"'
+Write-Host '   /topus "analyze how auth works"          # PLAN mode (auto-detected)'
+Write-Host '   /topus --exec "add OAuth2 to the API"    # EXECUTE mode (explicit)'
 Write-Host ""
 Write-Host "Installed to:" -ForegroundColor Blue
 Write-Host "   $CLAUDE_DIR\commands\"

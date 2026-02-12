@@ -144,7 +144,7 @@ Source: [Makefile/CI config/etc.]
 | `anti-yolo-web` | Web app development specialist | Frontend, React, Vue, dashboards, UI components |
 | `aidevtasks` | PRD-based feature development | New features requiring product specs |
 | `agetos` | Project initialization/standards | Setup, conventions, new projects |
-| `plan-opus` | Deep planning with parallel exploration | Architecture, migrations, complex unknowns |
+| `topus` | Deep planning with parallel exploration | Architecture, migrations, complex unknowns |
 | `complete_system` | Full 6-agent validation pipeline | Moderate features, refactoring with validation |
 | `orchestrated` | Streamlined 3-agent workflow | Simple fixes, config changes, quick tasks |
 
@@ -159,7 +159,7 @@ Before any scoring, semantically analyze if the task matches a specialized domai
 | **Web Development** | `anti-yolo-web` | HTML, CSS, JavaScript, React, Vue, Angular, frontend, UI, dashboard, component, web app |
 | **Feature Development** | `aidevtasks` | "build feature", "create system", product requirements, user stories, multi-component features |
 | **Project Setup** | `agetos` | Setup, initialize, standards, conventions, new project, project structure |
-| **Deep Planning** | `plan-opus` | Architecture design, major refactor, migration, "plan first", many unknowns |
+| **Deep Planning** | `topus` | Architecture design, major refactor, migration, "plan first", many unknowns |
 
 **Decision Logic**:
 - Domain match with HIGH confidence → Use specialized workflow (skip Phase 2)
@@ -200,7 +200,7 @@ Only when NO specialized domain is detected, use 3-dimensional assessment:
 |----------------|----------|----------|
 | 1.0 - 2.0 | `orchestrated` | Bug fixes, small changes, config updates, typos |
 | 2.1 - 3.5 | `complete_system` | Moderate features, refactoring, validation needed |
-| 3.6 - 5.0 | `plan-opus` | Complex multi-system changes, high risk |
+| 3.6 - 5.0 | `topus` | Complex multi-system changes, high risk |
 
 ---
 
@@ -294,7 +294,7 @@ When triggered:
 ✅ Implementation complete! Starting review...
 ```
 
-### Plan-Opus Workflow (Phased Execution)
+### Topus Workflow (Phased Execution)
 
 For system-wide changes, decompose into phases:
 
@@ -483,7 +483,7 @@ If something fails:
 | `anti-yolo-web` | Phase 1 | 3 + wireframe | Web/frontend, React, Vue, dashboards |
 | `aidevtasks` | Phase 1 | PRD-based | Features requiring product specs |
 | `agetos` | Phase 1 | Setup | Project initialization, standards |
-| `plan-opus` | Phase 1 + 2 | Variable | Architecture, migrations, complex tasks |
+| `topus` | Phase 1 + 2 | Variable | Architecture, migrations, complex tasks |
 | `complete_system` | Phase 2 | 6 | Moderate features, validation needed |
 | `orchestrated` | Phase 2 | 3 | Simple fixes, config changes |
 
@@ -501,7 +501,7 @@ Task comes in
 │  Web Dev? → anti-yolo   │
 │  Feature? → aidevtasks  │
 │  Setup?   → agetos      │
-│  Planning? → plan-opus  │
+│  Planning? → topus  │
 └─────────────────────────┘
     │
     │ No domain match?
@@ -511,7 +511,7 @@ Task comes in
 │                         │
 │  1.0-2.0 → orchestrated │
 │  2.1-3.5 → complete_sys │
-│  3.6-5.0 → plan-opus    │
+│  3.6-5.0 → topus    │
 └─────────────────────────┘
 ```
 

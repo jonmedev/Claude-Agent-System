@@ -2,7 +2,7 @@
 HOOK_METADATA:
   id: file-change-tracker
   name: File Change Tracker
-  version: 2.0.0
+  version: 3.0.0
   type: PostToolUse
   priority: 15
   enabled: true
@@ -255,7 +255,7 @@ def execute(context):
 
 ---
 
-**Version**: 2.0.0 (Full Hook - Phase 2.3)
+**Version**: 3.0.0 (Full Hook - Phase 2.3)
 **Upgraded From**: session-state-tracker.md v1.0.0 (Phase 1.2)
 **Last Updated**: 2025-01-26
 **Dependencies**: Session state system

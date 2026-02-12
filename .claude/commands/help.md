@@ -74,27 +74,38 @@ All workflows are accessed through `/systemcc` which automatically:
 - Runs all agents sequentially
 - No manual agent commands needed
 
-### 📝 Planning Command
+### 📝 Planning & Execution Command
 
-#### `/plan-opus` - Deep Planning with Parallel Exploration
-Creates detailed implementation plans using Claude Opus for complex tasks.
-- Spawns parallel Explore agents for thorough codebase analysis
-- Generates comprehensive plan files for user review
-- Requires explicit user approval before implementation
-- Perfect for complex features requiring careful analysis
+#### `/topus` v3.0 - Dual-Mode Planning & Execution
+Intelligent system with two modes: **PLAN** (analysis/exploration, no code changes) and **EXECUTE** (full implementation pipeline).
+
+**Mode Auto-Detection:** The system infers mode from your intent. Manual override with `--plan` or `--exec` flags.
+
+- **PLAN mode** - Deep codebase analysis, architecture exploration, confidence-scored findings (no code modifications)
+- **EXECUTE mode** - Wave-based parallel agent execution with 3-resolution planning (Strategic/Tactical/Operational)
+- **DSVP** - Domain-Specific Verification (auth, database, API, frontend, etc.)
+- **CIA** - Change Impact Analysis with risk scoring
+- **CPE** - Codebase Pattern Extraction (learns project conventions)
+- **Confidence Scoring** - Exploration findings tagged HIGH/MEDIUM/LOW
+- **Adaptive Tiers** - SIMPLE (~8 agents), MEDIUM (~15-22), COMPLEX (~22-35)
 
 ```bash
-/plan-opus "implement user authentication with OAuth2"
-/plan-opus "refactor database layer for better performance"
+# PLAN mode (auto-detected from analysis intent)
+/topus "analyze how our auth system works"
+/topus --plan "explore database schema dependencies"
+
+# EXECUTE mode (auto-detected from implementation intent)
+/topus "add OAuth2 to the API"
+/topus --exec "refactor database layer for better performance"
 ```
 
 **Workflow:**
-1. Task Understanding - Clarify requirements
+1. Task Understanding - Clarify requirements, auto-detect mode
 2. Parallel Exploration - Multiple agents explore architecture, features, dependencies, tests
-3. Hypothesis Verification - Read and verify findings
+3. Hypothesis Verification - Read and verify findings with confidence scoring
 4. Plan Creation - Generate detailed plan in `~/.claude/plans/`
-5. User Confirmation - Wait for approval before implementing
-6. Plan Re-read - Respect user's edits, then implement
+5. User Confirmation - Wait for approval before implementing (EXECUTE mode)
+6. Wave-Based Execution - Dependency-ordered parallel agents (EXECUTE mode)
 
 ### 🔍 Utility Commands
 
@@ -118,7 +129,8 @@ Use /systemcc - it intelligently routes for you!
 Automatic routing:
 - Project setup → Agent OS (/agetos)
 - Feature building → AI Dev Tasks (/aidevtasks)
-- Large context → Phase-based via plan-opus
+- Architecture analysis → Topus PLAN mode
+- Large context → Topus EXECUTE mode (phase-based)
 - Complex validation → Complete system
 - Quick fixes → Orchestrated
 
@@ -128,7 +140,7 @@ Manual override:
 
 ## Context Management
 
-`/systemcc` automatically uses phase-based execution (via `/plan-opus`) when:
+`/systemcc` automatically uses phase-based execution (via `/topus`) when:
 - Current context > 30k tokens
 - Project has 100+ files
 - Task touches 5+ modules

@@ -52,7 +52,10 @@ The enhanced system automatically:
 
 ## Manual Commands (Power Users)
 
-- `/plan-opus` - Deep planning with parallel exploration for complex tasks
+- `/topus` v3.0 - Dual-mode: PLAN (analysis/exploration) or EXECUTE (implementation pipeline)
+  - Auto-detects mode from intent, or use `--plan` / `--exec` flags
+  - Example: `/topus "analyze auth system"` (PLAN) | `/topus "add OAuth2"` (EXECUTE)
+  - Features: DSVP, CIA, CPE, confidence scoring, wave-based execution
 - `/orchestrated` - Force streamlined workflow with error handling
 - `/planner` - Start complete system with comprehensive validation
 - `/help` - Show enhanced command system

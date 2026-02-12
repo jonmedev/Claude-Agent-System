@@ -1,6 +1,6 @@
 ---
-name: pcc
-description: "Parallel Claude Coordinator v3.0 — Intelligent parallel orchestration with dual-mode (PLAN/EXECUTE), domain-expert agents, graph exploration, knowledge bus, confidence scoring, wave-based execution, inter-agent signal bus, and adaptive scaling."
+name: topus
+description: "Topus v3.0 — Intelligent parallel orchestration with dual-mode (PLAN/EXECUTE), domain-expert agents, graph exploration, knowledge bus, confidence scoring, wave-based execution, inter-agent signal bus, and adaptive scaling."
 model: opus
 argument-hint: <task description or --plan/--exec task description>
 ---

@@ -1,5 +1,7 @@
 # Phase-Based Workflow System
 
+> **Powered by topus v3.0** -- This workflow is the execution backbone of the `/topus` and `/pcc` commands. All v3.0 features (dual-mode, CPE, CIA, DSVP, confidence scoring, wave-based execution, signal bus) are available when this workflow is invoked.
+
 ## Introduction
 
 The Phase-Based Workflow is a development methodology that dramatically improves Claude Code's effectiveness on complex tasks by breaking them into focused, sequential phases. This approach addresses the context window limitations and maintains high quality throughout large projects.
@@ -51,26 +53,38 @@ Phases build incrementally:
 - Phase 2-N: Feature implementation
 - Final Phase: Integration and polish
 
-## Workflow Structure
+## Workflow Structure (topus v3.0)
+
+With v3.0, the workflow supports **dual-mode operation**: PLAN mode produces a strategy document and stops; EXECUTE mode runs the full pipeline below. Mode is auto-detected from intent or overridden with `--plan` / `--exec`.
 
 ```
-/plan-opus "complex task description"
+/topus "complex task description"
     │
-    ├── Creates implementation plan
-    │   └── Breaks task into phases with parallel exploration
+    ├── Mode auto-detection (PLAN or EXECUTE)
     │
-    ├── Executes Phase 1
-    │   ├── Loads minimal context
-    │   ├── Implements phase objective
-    │   └── Documents outcomes
+    ├── CPE: Codebase Pattern Extraction (~30s)
+    │   └── Auto-learns naming, architecture, and conventions
     │
-    ├── Executes Phase 2
-    │   ├── Loads Phase 1 summary + new context
-    │   ├── Implements phase objective
-    │   └── Documents outcomes
+    ├── Parallel exploration with confidence scoring
+    │   └── Findings tagged HIGH / MEDIUM / LOW
     │
-    └── ... continues through all phases
-        └── Creates final summary
+    ├── CIA: Change Impact Analysis (risk 1-10)
+    │
+    ├── Creates 3-resolution implementation plan
+    │   └── Strategic → Tactical → Operational
+    │   └── .claude/plans/{task-slug}.md
+    │
+    │   [PLAN mode stops here]
+    │
+    ├── Wave-based execution (DAG-ordered)
+    │   ├── Signal bus for inter-agent communication
+    │   ├── Adaptive timeouts (3/8/15 min per tier)
+    │   └── Conditional phase skipping for simple tasks
+    │
+    ├── DSVP verification (domain-specific profiles)
+    │   └── auth, database, API, frontend, infra, data, testing
+    │
+    └── Simplification + final summary
 ```
 
 ## Benefits Demonstrated
@@ -118,11 +132,13 @@ Phase 5: Testing & Polish (4,000 tokens)
 
 ## Integration with Agent System
 
-The phase-based workflow complements existing agents:
+The phase-based workflow complements existing agents and is the core execution engine for topus v3.0:
 
-1. **With Complete System**: Each phase can use full agent workflow
-2. **With Orchestrated**: Phases can be executed via orchestrated agents
-3. **With /systemcc**: Can delegate phase execution to appropriate workflow
+1. **With `/topus` (v3.0)**: Primary execution mode -- full dual-mode pipeline with CPE, CIA, DSVP, wave execution, and signal bus
+2. **With `/pcc` (v3.0)**: Plugin equivalent -- same v3.0 engine, installed via plugin system
+3. **With Complete System**: Each phase can use full agent workflow
+4. **With Orchestrated**: Phases can be executed via orchestrated agents
+5. **With /systemcc**: Can delegate phase execution to appropriate workflow
 
 ## Best Practices
 
@@ -187,7 +203,7 @@ Phase-based development typically achieves:
 
 1. Use the phase-based planning command:
    ```bash
-   /plan-opus "implement complete search functionality with filters"
+   /topus "implement complete search functionality with filters"
    ```
 
 2. Or let `/systemcc` automatically route to phase-based execution:
@@ -217,7 +233,7 @@ Blocks: Phase 6
 ### Checkpoint Recovery
 Resume from specific phase by referencing the plan file:
 ```bash
-/plan-opus --resume "continue from phase 3"
+/topus --resume "continue from phase 3"
 ```
 
 ## Troubleshooting
@@ -236,14 +252,19 @@ Resume from specific phase by referencing the plan file:
    - Solution: Restructure phases
    - Ensure: Clear progression path
 
+## Delivered in v3.0
+
+The following previously planned enhancements are now available:
+
+- **AI-powered phase generation** -- CPE auto-learns conventions, CIA scores risk, 3-resolution planning auto-generates phases
+- **Automatic complexity scoring** -- Confidence scoring (HIGH/MEDIUM/LOW) on all exploration findings, plus CIA risk scores (1-10)
+- **Collaborative phase execution** -- Signal bus enables real-time inter-agent communication during wave-based execution
+
 ## Future Enhancements
 
-- AI-powered phase generation
-- Automatic complexity scoring
 - Phase template library
 - Integration with CI/CD
-- Collaborative phase execution
 
 ## Conclusion
 
-Phase-based development transforms how Claude Code handles complex tasks. By breaking work into focused phases, we achieve higher quality, better documentation, and more reliable results. Start using `/plan-opus` today for your complex development tasks.
+Phase-based development transforms how Claude Code handles complex tasks. With topus v3.0, phases are now enhanced with CPE pattern extraction, CIA risk analysis, confidence-scored exploration, wave-based parallel execution, and domain-specific verification via DSVP. Start using `/topus` (or `/pcc` via the plugin) today for your complex development tasks.

@@ -8,7 +8,7 @@ This middleware applies to ALL commands:
 - `/systemcc` - Master router
 - `/agetos` - Agent OS workflow
 - `/aidevtasks` - PRD-based development
-- `/plan-opus` - Phase-based planning and execution
+- `/topus` - Phase-based planning and execution
 - `/planner`, `/executer`, etc. - Individual agents
 - `/orchestrated` - Streamlined workflow
 - Any future commands
@@ -42,7 +42,9 @@ This middleware applies to ALL commands:
   ],
   metadata: {
     complexity_score: number,  // 1-10 complexity rating
-    suggested_workflow: string // Recommended workflow type
+    suggested_workflow: string, // Recommended workflow type
+    topus_mode_hint: 'plan' | 'execute' | null,  // v3.0: Detected mode intent for topus routing
+    topus_flag: '--plan' | '--exec' | null        // v3.0: Recommended override flag when intent is clear
   }
 }
 ```
@@ -80,10 +82,16 @@ Apply command-specific optimizations:
 - Include user story elements
 - Add acceptance criteria hints
 
-**For /plan-opus (Phase-based)**
-- Emphasize decomposition needs
-- Include phase boundaries
-- Add context preservation notes
+**For /topus (v3.0 Dual-Mode Orchestration)**
+- Detect PLAN vs EXECUTE intent from user's prompt and hint accordingly
+  - PLAN signals: analyze, investigate, explore, audit, assess, evaluate, review, study, "how should we", "what's the best approach"
+  - EXECUTE signals: implement, create, build, fix, refactor, migrate, deploy, remove, replace, upgrade, update, modify
+- Include `--plan` or `--exec` flag recommendation in metadata when intent is clear
+- Emphasize decomposition needs and phase boundaries
+- Add context preservation notes for wave-based execution
+- Note CPE integration: Topus v3.0 will extract codebase patterns automatically; Lyra should front-load relevant convention hints so CPE has a head start
+- Feed confidence scoring: Lyra's optimized prompts should include explicit scope and risk indicators so Topus confidence system (HIGH/MEDIUM/LOW) can score findings accurately
+- Reference DSVP domains when task maps to auth, database, API, frontend, or infra
 
 **For Agent Commands (/planner, etc.)**
 - Align with agent specialization
@@ -121,10 +129,16 @@ Original: "chat feature"
 Optimized: "Create a real-time chat feature for [user type]. Core requirements: 1-on-1 messaging, group chats, message persistence, typing indicators, read receipts, file sharing. Target platforms: web and mobile. Performance: <100ms message delivery. Security: end-to-end encryption."
 ```
 
-### Phase-Based (/plan-opus)
+### Phase-Based (/topus) — v3.0 PLAN Mode
+```
+Original: "how should we approach migrating to microservices?"
+Optimized: "Analyze the current monolithic [detected framework] architecture and propose a microservices migration strategy. [MODE HINT: --plan] Explore service boundaries, data ownership, and inter-service communication patterns. Assess risk for each decomposition option (CIA scoring). Extract existing codebase patterns (CPE) to preserve conventions. Deliver: architecture analysis with confidence scores (HIGH/MEDIUM/LOW), 3-level plan (strategic → tactical → operational), and DSVP profiles for each service domain."
+```
+
+### Phase-Based (/topus) — v3.0 EXECUTE Mode
 ```
 Original: "refactor everything"
-Optimized: "Systematically refactor the entire [detected framework] application. Phase 1: Analyze current architecture and identify problem areas. Phase 2: Create refactoring plan with risk assessment. Phase 3: Implement core structure changes. Phase 4: Migrate components. Phase 5: Update tests and documentation."
+Optimized: "Systematically refactor the entire [detected framework] application. [MODE HINT: --exec] Wave 1: Analyze current architecture and extract codebase patterns (CPE). Wave 2: Create refactoring plan with Change Impact Analysis (CIA risk scoring 1-10). Wave 3: Implement core structure changes following extracted conventions. Wave 4: Migrate components in dependency order. Wave 5: Update tests (coverage targets from test strategy generation) and documentation. Use DSVP profiles for domain-specific validation. Signal bus for inter-agent coordination."
 ```
 
 ## Universal Enhancement Rules
@@ -188,7 +202,7 @@ Based on complexity scoring:
 - **1-3**: Orchestrated workflow (simple, focused)
 - **4-6**: Complete system (multi-step validation)
 - **7-8**: AI Dev Tasks (PRD-based approach)
-- **9-10**: Phase-based execution (context management)
+- **9-10**: Topus v3.0 (dual-mode: PLAN for analysis/exploration, EXECUTE for implementation)
 
 ## Build Configuration Integration (NEW)
 

@@ -1,7 +1,7 @@
 {
   "name": "claude-agent-system",
-  "version": "1.0.0",
-  "description": "Parallel Claude Coordinator plugins for orchestrated multi-agent development",
+  "version": "3.0.0",
+  "description": "Parallel Claude Coordinator v3.0 plugins for orchestrated dual-mode multi-agent development",
   "owner": {
     "name": "Kasempiternal",
     "url": "https://github.com/Kasempiternal"
@@ -9,8 +9,8 @@
   "plugins": [
     {
       "name": "pcc",
-      "version": "1.0.0",
-      "description": "Parallel Claude Coordinator - Orchestrate tasks with Sonnet scouts and Opus implementers",
+      "version": "3.0.0",
+      "description": "Parallel Claude Coordinator v3.0 - Orchestrate tasks with dual-mode Sonnet scouts and Opus implementers",
       "source": "./claude-agent-system-plugin"
     }
   ]

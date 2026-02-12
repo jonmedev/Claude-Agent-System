@@ -1,6 +1,6 @@
 # Claude Agent System Plugin
 
-A Claude Code plugin with intelligent workflow orchestration, parallel agent coordination, and automated code review.
+A Claude Code plugin with intelligent workflow orchestration, parallel agent coordination, and automated code review. Now powered by **topus v3.0**.
 
 ## Skills
 
@@ -21,20 +21,24 @@ Features:
 - Triple code review
 - Complete end-to-end execution
 
-### `/pcc` - Parallel Claude Coordinator
-Uses **Sonnet scouts** for fast exploration and **Opus agents** for implementation.
+### `/pcc` - Parallel Claude Coordinator (topus v3.0)
+The **plugin version of topus v3.0**. Dual-mode orchestrator with Sonnet scouts and Opus implementers.
 
 ```bash
 /pcc implement user authentication with JWT tokens
+/pcc --plan "analyze the payment system architecture"
+/pcc --exec "add WebSocket support"
 ```
+
+**v3.0 features included**: Dual-mode (PLAN/EXECUTE) with auto-detection, CPE (Codebase Pattern Extraction), CIA (Change Impact Analysis), DSVP (Domain-Specific Verification Profiles), confidence scoring, wave-based execution, signal bus, and adaptive timeouts.
 
 Best for:
 - Most development tasks
 - Cost-conscious workflows
 - When exploration speed matters
 
-### `/pcc-opus` - PCC Opus Edition
-Uses **Opus scouts** AND **Opus implementers** for maximum quality.
+### `/pcc-opus` - PCC Opus Edition (topus v3.0)
+Uses **Opus scouts** AND **Opus implementers** for maximum quality. Same v3.0 engine as `/pcc`.
 
 ```bash
 /pcc-opus refactor the entire payment processing system
@@ -83,12 +87,12 @@ Features:
 
 ## Skill Comparison
 
-| Skill | Use Case | Agents | Modifies Code? |
-|-------|----------|--------|----------------|
-| `/systemcc` | Any implementation task - auto-routes | Auto-selected | Yes |
-| `/pcc` | Parallel orchestration | Sonnet scouts (2-6) + Opus implementers (2-6) | Yes |
-| `/pcc-opus` | Max quality orchestration | Opus scouts (2-6) + Opus implementers (2-6) | Yes |
-| `/review` | Code review & analysis + fix | 6 review agents + 1-4 fix agents | Only if opted in |
+| Skill | Use Case | Engine | Agents | Modifies Code? |
+|-------|----------|--------|--------|----------------|
+| `/systemcc` | Any implementation task - auto-routes | Auto-selected | Auto-selected | Yes |
+| `/pcc` | Dual-mode orchestration (v3.0) | topus v3.0 | SIMPLE ~8, MEDIUM ~15-22, COMPLEX ~22-35 | Yes (EXECUTE) / No (PLAN) |
+| `/pcc-opus` | Max quality orchestration (v3.0) | topus v3.0 | SIMPLE ~8, MEDIUM ~15-22, COMPLEX ~22-35 | Yes (EXECUTE) / No (PLAN) |
+| `/review` | Code review & analysis + fix | Review swarm | 6 review agents + 1-4 fix agents | Only if opted in |
 
 ## How It Works
 
@@ -101,18 +105,23 @@ Features:
 5. **Review** - Triple code review (Senior Engineer, Lead Engineer, Architect)
 6. **Complete** - Summary with session learnings
 
-### `/pcc` and `/pcc-opus` Flow
+### `/pcc` and `/pcc-opus` Flow (topus v3.0)
 
-1. **Task Understanding** - Clarifies the task with you
-2. **Parallel Exploration** - Spawns 2-6 scout agents (Sonnet or Opus)
-3. **Synthesis** - Combines findings into unified understanding
-4. **Clarification** - Asks questions if multiple approaches exist
-5. **Plan Creation** - Creates editable `.claude/plans/{task}.md`
-6. **User Review** - You edit and approve the plan
-7. **Parallel Implementation** - Spawns 2-6 Opus agents
-8. **Verification** - Tests and code review
-9. **Simplification** - Parallel cleanup agents
-10. **Final Report** - Summarizes everything
+Mode is auto-detected from intent, or forced with `--plan` / `--exec`.
+
+1. **Mode Detection** - Auto-detects PLAN or EXECUTE from your request
+2. **CPE** - Codebase Pattern Extraction (~30s, learns project conventions)
+3. **Parallel Exploration** - Scout agents map the codebase (findings tagged HIGH/MEDIUM/LOW)
+4. **CIA** - Change Impact Analysis with risk scoring (1-10)
+5. **Synthesis** - Combines findings into unified understanding
+6. **3-Resolution Plan Creation** - Strategic, Tactical, and Operational levels in `.claude/plans/{task}.md`
+7. **User Review** - You edit and approve the plan _(PLAN mode stops here)_
+8. **Wave-Based Implementation** - DAG-ordered parallel agents with signal bus
+9. **DSVP Verification** - Domain-specific verification profiles + test strategy execution
+10. **Simplification** - Parallel cleanup agents
+11. **Final Report** - Summarizes everything
+
+Complexity tiers: SIMPLE (~8 agents), MEDIUM (~15-22 agents), COMPLEX (~22-35 agents).
 
 ### `/review` Flow
 

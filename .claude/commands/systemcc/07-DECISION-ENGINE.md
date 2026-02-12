@@ -13,7 +13,7 @@ Two-phase workflow selection: Domain Detection first, then Complexity Scoring fa
 | `anti-yolo-web` | Web app development specialist | Frontend, React, Vue, dashboards, UI components |
 | `aidevtasks` | PRD-based feature development | New features requiring product specs |
 | `agetos` | Project initialization/standards | Setup, conventions, new projects |
-| `plan-opus` | Deep planning with parallel exploration | Architecture, migrations, complex unknowns |
+| `topus` (v3.0) | Dual-mode orchestration: PLAN (analysis) / EXECUTE (implementation) | Architecture analysis, migrations, complex unknowns, deep planning, large-scale implementations |
 | `complete_system` | Full 6-agent validation pipeline | Moderate features, refactoring with validation |
 | `orchestrated` | Streamlined 3-agent workflow | Simple fixes, config changes, quick tasks |
 
@@ -30,7 +30,8 @@ Before any scoring, Claude semantically analyzes if the task matches a specializ
 | **Web Development** | `anti-yolo-web` | Building/modifying web interfaces, React/Vue/Angular components, HTML/CSS/JavaScript, dashboards, forms, buttons, frontend UI, responsive design, web apps |
 | **Feature Development** | `aidevtasks` | "build feature", "create system", product requirements needed, user stories, new functionality with multiple components, detailed specs beneficial |
 | **Project Setup** | `agetos` | Initialize project, setup standards, establish conventions, new project structure, team coding standards, project configuration |
-| **Deep Planning** | `plan-opus` | Architecture design, major refactoring, system migration, "plan first" requests, exploration needed, multiple valid approaches, significant unknowns |
+| **Deep Planning / Analysis** | `topus --plan` | Architecture design, "plan first" requests, exploration, audit, assess, investigate, evaluate, review, study, "how should we", "what's the best approach", significant unknowns |
+| **Complex Implementation** | `topus --exec` | Major refactoring, system migration, large-scale builds, multi-component implementation, deploy, remove, replace, upgrade system-wide changes |
 
 ### Phase 1 Decision Logic
 
@@ -63,7 +64,7 @@ Only when NO specialized domain is detected, use 3-dimensional assessment.
 |----------------|----------|----------|
 | 1.0 - 2.0 | `orchestrated` | Bug fixes, small changes, config updates, typos |
 | 2.1 - 3.5 | `complete_system` | Moderate features, refactoring, validation needed |
-| 3.6 - 5.0 | `plan-opus` | Complex multi-system changes, high risk |
+| 3.6 - 5.0 | `topus` (v3.0 auto-detects PLAN/EXECUTE mode) | Complex multi-system changes, high risk |
 
 ## Display Format
 
@@ -140,15 +141,28 @@ Phase 1 - Domain Detection:
 → Using **agetos** workflow
 ```
 
-### Example 4: Deep Planning → plan-opus
+### Example 4a: Deep Planning → topus PLAN mode
 ```
-Task: "plan the migration from REST API to GraphQL"
+Task: "analyze our architecture and assess how we should migrate from REST to GraphQL"
 
 Phase 1 - Domain Detection:
-✓ Deep Planning detected
-  → Major migration, architecture shift, many unknowns
+✓ Deep Planning / Analysis detected
+  → analyze, assess, "how should we" — PLAN mode signal words
 
-→ Using **plan-opus** workflow
+→ Using **topus --plan** workflow (v3.0 PLAN mode: analysis only, no code changes)
+  Features: CIA risk scoring, CPE pattern extraction, confidence scoring, 3-level planning
+```
+
+### Example 4b: Complex Implementation → topus EXECUTE mode
+```
+Task: "migrate the entire REST API to GraphQL across all services"
+
+Phase 1 - Domain Detection:
+✓ Complex Implementation detected
+  → migrate, entire, system-wide — EXECUTE mode signal words
+
+→ Using **topus --exec** workflow (v3.0 EXECUTE mode: full implementation pipeline)
+  Features: wave-based execution, DSVP validation, signal bus, adaptive timeouts
 ```
 
 ### Example 5: No Domain → Complexity Fallback
@@ -247,10 +261,11 @@ Task comes in
 ┌─────────────────────────┐
 │  PHASE 1: Domain Check  │
 │                         │
-│  Web Dev? → anti-yolo   │
-│  Feature? → aidevtasks  │
-│  Setup?   → agetos      │
-│  Planning? → plan-opus  │
+│  Web Dev?  → anti-yolo        │
+│  Feature?  → aidevtasks       │
+│  Setup?    → agetos           │
+│  Analysis? → topus --plan     │
+│  Implement?→ topus --exec     │
 └─────────────────────────┘
     │
     │ No domain match?
@@ -260,10 +275,55 @@ Task comes in
 │                         │
 │  1.0-2.0 → orchestrated │
 │  2.1-3.5 → complete_sys │
-│  3.6-5.0 → plan-opus    │
+│  3.6-5.0 → topus v3.0   │
 └─────────────────────────┘
 ```
 
 ---
 
-*Domain detection first, complexity scoring as fallback. All 6 workflows available.*
+## Topus v3.0 Dual-Mode Routing
+
+Topus v3.0 introduces **dual-mode operation**. The decision engine must detect the correct mode:
+
+### PLAN Mode (analysis only, no code changes)
+
+**Indicators**:
+- Analysis verbs: analyze, investigate, explore, map, audit, assess, evaluate, review, study, understand, explain, document, compare, research
+- Strategy markers: "how should we", "what's the best approach", "propose a strategy"
+- Question markers: "how does X work", "what would happen if", exploratory phrasing
+
+**Override flag**: `--plan`
+
+**Output**: Architecture analysis, risk assessments, confidence-scored findings, 3-level plans (strategic/tactical/operational)
+
+### EXECUTE Mode (full implementation pipeline)
+
+**Indicators**:
+- Imperative verbs: add, implement, create, build, fix, refactor, migrate, deploy, remove, delete, replace, upgrade, update, change, modify
+- Outcome markers: specific deliverables, file changes, concrete outputs expected
+
+**Override flag**: `--exec`
+
+**Output**: Wave-based code execution, DSVP-validated changes, test strategy with coverage targets
+
+### Auto-Detection
+
+When no flag is provided, Topus v3.0 analyzes signal words in the user's prompt to auto-detect the mode. The decision engine should pass mode hints when the intent is clear.
+
+### v3.0 Features Reference
+
+| Feature | Description |
+|---------|-------------|
+| **DSVP** | Domain-Specific Verification Profiles (auth, database, API, frontend, infra) |
+| **Signal Bus** | Inter-agent communication during implementation |
+| **CIA** | Change Impact Analysis with risk scoring (1-10) |
+| **CPE** | Codebase Pattern Extraction (learns project conventions) |
+| **Confidence Scoring** | HIGH/MEDIUM/LOW on all exploration findings |
+| **Wave Execution** | Dependency-ordered agent deployment |
+| **3-Level Planning** | Level 1 (strategic), Level 2 (tactical), Level 3 (operational) |
+| **Test Strategy** | Automated test planning with coverage targets |
+| **Adaptive Timeouts** | Tier-based timeout management |
+
+---
+
+*Domain detection first, complexity scoring as fallback. All 6 workflows available. Topus v3.0 dual-mode aware.*
